@@ -12,6 +12,7 @@ Audio recorder app as part of assignment
 
 - toggle icon when audio finishes
 - clear functionality do not delete recordings from internal storage
+- on listing waves are not appearing on Android
 
 ## Scope of improvemnts
 
