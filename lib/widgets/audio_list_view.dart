@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:audio_qoohoo/constants/colors.dart';
 import 'package:audio_qoohoo/controllers/audio_controller.dart';
 import 'package:audio_qoohoo/models/audio_model.dart';
@@ -28,27 +26,114 @@ class AudioList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     NeumorphicButton(
-                        style: const NeumorphicStyle(
-                          depth: 3,
-                          shape: NeumorphicShape.flat,
-                          boxShape: NeumorphicBoxShape.circle(),
+                      style: const NeumorphicStyle(
+                        depth: 3,
+                        shape: NeumorphicShape.flat,
+                        boxShape: NeumorphicBoxShape.circle(),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(2),
+                        child: Icon(
+                          listOfRecordings[index].isPlaying
+                              ? Icons.stop
+                              : Icons.play_arrow,
+                          color: primaryColor,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(2),
-                          child: Icon(
-                            listOfRecordings[index].isPlaying
-                                ? Icons.stop
-                                : Icons.play_arrow,
-                            color: primaryColor,
+                      ),
+                      onPressed: () async {
+                        await audioController.preparePlayer(index);
+                        Get.bottomSheet(
+                          Obx(
+                            () {
+                              bool isPlaying = audioController
+                                  .getListOfRecordings[index].isPlaying;
+                              int timer = audioController
+                                  .getListOfRecordings[index].time;
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const Spacer(),
+                                    Text(
+                                      isPlaying ? "Playing" : "Not Playing",
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        color: accentColor,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    AudioFileWaveforms(
+                                      playerWaveStyle: const PlayerWaveStyle(
+                                        showBottom: true,
+                                        fixedWaveColor: primaryColor,
+                                        liveWaveColor: accentColor,
+                                        waveThickness: 1.5,
+                                        scaleFactor: 0.5,
+                                      ),
+                                      size: Size(Get.width, 26.0),
+                                      playerController:
+                                          audioController.getPlayerController(),
+                                    ),
+                                    const Spacer(),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '${(Duration(seconds: timer))}'
+                                              .split('.')[0]
+                                              .padLeft(8, '0'),
+                                          style: const TextStyle(
+                                            color: accentColor,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                    NeumorphicButton(
+                                      style: NeumorphicStyle(
+                                        depth: 6,
+                                        shape: NeumorphicShape.flat,
+                                        boxShape:
+                                            const NeumorphicBoxShape.circle(),
+                                        color: backgroundColor,
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(6),
+                                        child: Icon(
+                                          isPlaying
+                                              ? Icons.pause
+                                              : Icons.play_arrow,
+                                          color: isPlaying
+                                              ? accentColor
+                                              : primaryColor,
+                                          size: 30,
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        if (isPlaying) {
+                                          audioController
+                                              .stopPlayingRecording(index);
+                                        } else {
+                                          audioController.playRecording(index);
+                                        }
+                                      },
+                                    ),
+                                    const Spacer(),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
-                        ),
-                        onPressed: () {
-                          if (listOfRecordings[index].isPlaying) {
-                            audioController.stopPlayingRecording(index);
-                          } else {
-                            audioController.playRecording(index);
-                          }
-                        }),
+                          barrierColor: Colors.transparent,
+                          backgroundColor: backgroundColor,
+                        );
+                      },
+                    ),
                     const SizedBox(
                       width: 6,
                     ),
@@ -56,34 +141,26 @@ class AudioList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          DateFormat("hh:mm aa dd-MMM")
+                          DateFormat("dd MMM hh:mm aa")
                               .format(listOfRecordings[index].dateTime),
                           style: const TextStyle(
                             color: accentColor,
                             fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                        if (Platform.isIOS)
-                          const SizedBox(
-                            height: 12,
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        Text(
+                          '${(Duration(seconds: listOfRecordings[index].time))}'
+                              .split('.')[0]
+                              .padLeft(8, '0'),
+                          style: const TextStyle(
+                            color: accentColor,
+                            fontSize: 12,
                           ),
-                        if (Platform.isIOS)
-                          AudioFileWaveforms(
-                            enableSeekGesture: true,
-                            size: Size(
-                                MediaQuery.of(context).size.width / 1.75, 20),
-                            playerController:
-                                audioController.getPlayerController(index),
-                            density: 2,
-                            playerWaveStyle: const PlayerWaveStyle(
-                              scaleFactor: 0.2,
-                              waveThickness: 1.5,
-                              fixedWaveColor: primaryColor,
-                              liveWaveColor: accentColor,
-                              waveCap: StrokeCap.butt,
-                            ),
-                          ),
+                        ),
                       ],
                     ),
                   ],

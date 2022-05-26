@@ -23,18 +23,18 @@ class _AudioListingScreenState extends State<AudioListingScreen> {
           centerTitle: false,
           title: const Text("Qoohoo Recording App"),
           actions: [
-            NeumorphicButton(
-              onPressed: audioController.resetList,
+            NeumorphicFloatingActionButton(
               style: const NeumorphicStyle(
-                depth: 3,
-                shape: NeumorphicShape.flat,
+                depth: 6,
+                lightSource: LightSource.topLeft,
+                shape: NeumorphicShape.concave,
                 boxShape: NeumorphicBoxShape.circle(),
               ),
-              padding: const EdgeInsets.all(12.0),
               child: const Icon(
                 Icons.cleaning_services,
                 color: primaryColor,
               ),
+              onPressed: audioController.resetList,
             ),
           ],
         ),
@@ -42,8 +42,21 @@ class _AudioListingScreenState extends State<AudioListingScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: const [
             AudioList(),
-            RecordAudioView(),
           ],
+        ),
+        floatingActionButton: NeumorphicFloatingActionButton(
+          style: const NeumorphicStyle(
+            shape: NeumorphicShape.concave,
+            boxShape: NeumorphicBoxShape.circle(),
+            intensity: 4,
+          ),
+          onPressed: () => Get.bottomSheet(
+            const RecordAudioView(),
+            elevation: 10,
+            barrierColor: Colors.transparent,
+            backgroundColor: backgroundColor,
+          ),
+          child: const Icon(Icons.mic),
         ),
       ),
     );

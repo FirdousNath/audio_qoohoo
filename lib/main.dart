@@ -9,7 +9,7 @@ void main() {
       home: NeumorphicApp(
         themeMode: ThemeMode.light,
         theme: NeumorphicThemeData(
-          baseColor: Colors.white,
+          baseColor: Color(0xFFFFFFFF),
           lightSource: LightSource.topLeft,
           depth: 10,
         ),

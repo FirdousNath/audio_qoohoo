@@ -15,28 +15,59 @@ class RecordAudioView extends StatelessWidget {
       () {
         bool recordingStarted = audioController.isRecordingStarted;
         bool isRecording = audioController.isRecording;
+        int timer = audioController.getTimer;
         final RecorderController recorderController =
             audioController.getRecordController();
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              const Spacer(),
+              Text(
+                recordingStarted
+                    ? isRecording
+                        ? "Recording"
+                        : "Recording Paused"
+                    : "Start Recording",
+                style: const TextStyle(
+                  fontSize: 24,
+                  color: accentColor,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const Spacer(),
               AudioWaveforms(
                 waveStyle: const WaveStyle(
-                    showDurationLabel: false,
-                    showBottom: true,
-                    extendWaveform: true,
-                    showMiddleLine: false,
-                    waveColor: accentColor,
-                    waveThickness: 1.5),
+                  showDurationLabel: false,
+                  showBottom: true,
+                  extendWaveform: true,
+                  showMiddleLine: false,
+                  waveColor: accentColor,
+                  waveThickness: 1.5,
+                ),
                 enableGesture: false,
-                size: Size(Get.width, 26.0),
+                size: Size(Get.width, 36.0),
                 recorderController: recorderController,
               ),
               const SizedBox(
-                height: 30,
+                height: 40,
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '${(Duration(seconds: timer))}'
+                        .split('.')[0]
+                        .padLeft(8, '0'),
+                    style: const TextStyle(
+                      color: accentColor,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
               Row(
                 mainAxisAlignment: recordingStarted
                     ? MainAxisAlignment.spaceEvenly
@@ -47,10 +78,11 @@ class RecordAudioView extends StatelessWidget {
                   ),
                   if (recordingStarted)
                     NeumorphicButton(
-                      style: const NeumorphicStyle(
+                      style: NeumorphicStyle(
                         depth: 3,
                         shape: NeumorphicShape.flat,
-                        boxShape: NeumorphicBoxShape.circle(),
+                        boxShape: const NeumorphicBoxShape.circle(),
+                        color: backgroundColor,
                       ),
                       child: const Padding(
                         padding: EdgeInsets.all(4),
@@ -65,10 +97,11 @@ class RecordAudioView extends StatelessWidget {
                       },
                     ),
                   NeumorphicButton(
-                    style: const NeumorphicStyle(
-                      depth: 3,
+                    style: NeumorphicStyle(
+                      depth: 6,
                       shape: NeumorphicShape.flat,
-                      boxShape: NeumorphicBoxShape.circle(),
+                      boxShape: const NeumorphicBoxShape.circle(),
+                      color: backgroundColor,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(6),
@@ -88,10 +121,11 @@ class RecordAudioView extends StatelessWidget {
                   ),
                   if (recordingStarted)
                     NeumorphicButton(
-                      style: const NeumorphicStyle(
-                        depth: 3,
+                      style: NeumorphicStyle(
+                        depth: 4,
                         shape: NeumorphicShape.flat,
-                        boxShape: NeumorphicBoxShape.circle(),
+                        boxShape: const NeumorphicBoxShape.circle(),
+                        color: backgroundColor,
                       ),
                       child: const Padding(
                         padding: EdgeInsets.all(2),
@@ -110,9 +144,7 @@ class RecordAudioView extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const Spacer(),
             ],
           ),
         );
