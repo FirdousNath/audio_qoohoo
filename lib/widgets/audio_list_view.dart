@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_qoohoo/constants/colors.dart';
 import 'package:audio_qoohoo/controllers/audio_controller.dart';
 import 'package:audio_qoohoo/models/audio_model.dart';
@@ -23,7 +25,7 @@ class AudioList extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 6, bottom: 20),
                 margin: const EdgeInsets.all(8),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     NeumorphicButton(
                         style: const NeumorphicStyle(
@@ -62,24 +64,26 @@ class AudioList extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        AudioFileWaveforms(
-                          enableSeekGesture: true,
-                          size: Size(
-                              MediaQuery.of(context).size.width / 1.75, 20),
-                          playerController:
-                              audioController.getPlayerController(index),
-                          density: 2,
-                          playerWaveStyle: const PlayerWaveStyle(
-                            scaleFactor: 0.2,
-                            waveThickness: 1.5,
-                            fixedWaveColor: primaryColor,
-                            liveWaveColor: accentColor,
-                            waveCap: StrokeCap.butt,
+                        if (Platform.isIOS)
+                          const SizedBox(
+                            height: 12,
                           ),
-                        ),
+                        if (Platform.isIOS)
+                          AudioFileWaveforms(
+                            enableSeekGesture: true,
+                            size: Size(
+                                MediaQuery.of(context).size.width / 1.75, 20),
+                            playerController:
+                                audioController.getPlayerController(index),
+                            density: 2,
+                            playerWaveStyle: const PlayerWaveStyle(
+                              scaleFactor: 0.2,
+                              waveThickness: 1.5,
+                              fixedWaveColor: primaryColor,
+                              liveWaveColor: accentColor,
+                              waveCap: StrokeCap.butt,
+                            ),
+                          ),
                       ],
                     ),
                   ],

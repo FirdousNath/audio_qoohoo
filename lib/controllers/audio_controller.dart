@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_qoohoo/models/audio_model.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:get/get.dart';
@@ -49,8 +51,7 @@ class AudioController extends GetxController {
   void stopRecording(bool save) async {
     _recordingStarted.value = false;
     String path = await _recorderController.value.stop();
-    path = path.substring(7);
-
+    if (path.contains("file://")) path = path.substring(7);
     _isRecording.value = false;
     if (save) {
       PlayerController playerController = PlayerController();
@@ -92,10 +93,18 @@ class AudioController extends GetxController {
   }
 
   Future<bool> handlePermission() async {
-    if (await Permission.microphone.request().isGranted) {
-      return true;
+    if (Platform.isAndroid && await Permission.storage.request().isGranted) {
+      if (await Permission.microphone.request().isGranted) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
-      return false;
+      if (await Permission.microphone.request().isGranted) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 }
