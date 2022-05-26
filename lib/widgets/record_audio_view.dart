@@ -1,6 +1,7 @@
+import 'package:audio_qoohoo/constants/colors.dart';
 import 'package:audio_qoohoo/controllers/audio_controller.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 
 class RecordAudioView extends StatelessWidget {
@@ -16,70 +17,104 @@ class RecordAudioView extends StatelessWidget {
         bool isRecording = audioController.isRecording;
         final RecorderController recorderController =
             audioController.getRecordController();
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            AudioWaveforms(
-              waveStyle: const WaveStyle(
-                showDurationLabel: false,
-                showBottom: true,
-                extendWaveform: true,
-                showMiddleLine: false,
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              AudioWaveforms(
+                waveStyle: const WaveStyle(
+                    showDurationLabel: false,
+                    showBottom: true,
+                    extendWaveform: true,
+                    showMiddleLine: false,
+                    waveColor: accentColor,
+                    waveThickness: 1.5),
+                enableGesture: false,
+                size: Size(Get.width, 26.0),
+                recorderController: recorderController,
               ),
-              enableGesture: false,
-              size: Size(Get.width, 56.0),
-              recorderController: recorderController,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: recordingStarted
-                  ? MainAxisAlignment.spaceEvenly
-                  : MainAxisAlignment.center,
-              children: [
-                if (recordingStarted)
-                  GestureDetector(
-                    child: Icon(
-                      Icons.delete,
-                      color: Colors.red.shade400,
-                      size: 40,
+              const SizedBox(
+                height: 30,
+              ),
+              Row(
+                mainAxisAlignment: recordingStarted
+                    ? MainAxisAlignment.spaceEvenly
+                    : MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  if (recordingStarted)
+                    NeumorphicButton(
+                      style: const NeumorphicStyle(
+                        depth: 3,
+                        shape: NeumorphicShape.flat,
+                        boxShape: NeumorphicBoxShape.circle(),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(4),
+                        child: Icon(
+                          Icons.delete,
+                          color: primaryColor,
+                          size: 20,
+                        ),
+                      ),
+                      onPressed: () async {
+                        audioController.stopRecording(false);
+                      },
                     ),
-                    onTap: () async {
-                      audioController.stopRecording(false);
+                  NeumorphicButton(
+                    style: const NeumorphicStyle(
+                      depth: 3,
+                      shape: NeumorphicShape.flat,
+                      boxShape: NeumorphicBoxShape.circle(),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(6),
+                      child: Icon(
+                        isRecording ? Icons.pause : Icons.mic,
+                        color: recordingStarted ? accentColor : primaryColor,
+                        size: 30,
+                      ),
+                    ),
+                    onPressed: () async {
+                      if (!isRecording) {
+                        audioController.startRecording();
+                      } else {
+                        audioController.pauseRecording();
+                      }
                     },
                   ),
-                GestureDetector(
-                  child: Icon(
-                    isRecording ? Icons.pause_circle : Icons.play_circle,
-                    color: Colors.blue,
-                    size: 40,
-                  ),
-                  onTap: () async {
-                    if (!isRecording) {
-                      audioController.startRecording();
-                    } else {
-                      audioController.pauseRecording();
-                    }
-                  },
-                ),
-                if (recordingStarted)
-                  GestureDetector(
-                    child: Icon(
-                      Icons.send,
-                      color: Colors.green.shade400,
-                      size: 40,
+                  if (recordingStarted)
+                    NeumorphicButton(
+                      style: const NeumorphicStyle(
+                        depth: 3,
+                        shape: NeumorphicShape.flat,
+                        boxShape: NeumorphicBoxShape.circle(),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(2),
+                        child: Icon(
+                          Icons.add,
+                          color: primaryColor,
+                          size: 26,
+                        ),
+                      ),
+                      onPressed: () async {
+                        audioController.stopRecording(true);
+                      },
                     ),
-                    onTap: () async {
-                      audioController.stopRecording(true);
-                    },
+                  const SizedBox(
+                    width: 10,
                   ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-          ],
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
         );
       },
     );

@@ -1,11 +1,20 @@
 import 'package:audio_qoohoo/audio_listing_screen.dart';
-import 'package:flutter/material.dart';
+
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 
 void main() {
   runApp(
     const GetMaterialApp(
-      home: AudioListingScreen(),
+      home: NeumorphicApp(
+        themeMode: ThemeMode.light,
+        theme: NeumorphicThemeData(
+          baseColor: Colors.white,
+          lightSource: LightSource.topLeft,
+          depth: 10,
+        ),
+        home: AudioListingScreen(),
+      ),
     ),
   );
 }

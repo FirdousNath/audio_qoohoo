@@ -1,6 +1,7 @@
 import 'package:audio_qoohoo/models/audio_model.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class AudioController extends GetxController {
   final dynamic _recorderController = RecorderController().obs;
@@ -20,7 +21,7 @@ class AudioController extends GetxController {
 
   PlayerController getPlayerController(int index) {
     AudioModel audioModel = _recordingList.value[index];
-    return audioModel.audioPLayerController;
+    return audioModel.audioPlayerController;
   }
 
   void pauseRecording() async {
@@ -34,9 +35,15 @@ class AudioController extends GetxController {
   }
 
   void startRecording() async {
-    _recordingStarted.value = true;
-    await _recorderController.value.record();
-    _isRecording.value = true;
+    if (await handlePermission()) {
+      _recordingStarted.value = true;
+      await _recorderController.value.record();
+      _isRecording.value = true;
+    } else {
+      // we can show dialog and then redirect them to setting
+      //or show rationale on android
+      openAppSettings();
+    }
   }
 
   void stopRecording(bool save) async {
@@ -48,28 +55,33 @@ class AudioController extends GetxController {
     if (save) {
       PlayerController playerController = PlayerController();
       playerController.preparePlayer(path);
+
       List<AudioModel> temp = List.from(_recordingList.value);
-      temp.add(AudioModel(
-          audioPLayerController: playerController, dateTime: DateTime.now()));
+      temp.add(
+        AudioModel(
+          audioPlayerController: playerController,
+          dateTime: DateTime.now(),
+        ),
+      );
       _recordingList.value = List<AudioModel>.from(temp);
     }
   }
 
   void playRecording(int index) async {
     AudioModel audioModel = _recordingList.value[index];
-    await audioModel.audioPLayerController.startPlayer();
+    await audioModel.audioPlayerController.startPlayer();
     audioModel.togglePlay();
-    notifyListners(audioModel, index);
+    notifyListeners(audioModel, index);
   }
 
   void stopPlayingRecording(int index) async {
     AudioModel audioModel = _recordingList.value[index];
-    await audioModel.audioPLayerController.pausePlayer();
+    await audioModel.audioPlayerController.pausePlayer();
     audioModel.togglePlay();
-    notifyListners(audioModel, index);
+    notifyListeners(audioModel, index);
   }
 
-  void notifyListners(AudioModel audioModel, int index) {
+  void notifyListeners(AudioModel audioModel, int index) {
     List<AudioModel> temp = List.from(_recordingList.value);
     temp[index] = audioModel;
     _recordingList.value = List<AudioModel>.from(temp);
@@ -77,5 +89,13 @@ class AudioController extends GetxController {
 
   void resetList() {
     _recordingList.value = List<AudioModel>.empty();
+  }
+
+  Future<bool> handlePermission() async {
+    if (await Permission.microphone.request().isGranted) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

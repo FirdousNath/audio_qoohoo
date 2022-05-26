@@ -3,11 +3,11 @@ import 'package:audio_waveforms/audio_waveforms.dart';
 class AudioModel {
   DateTime dateTime;
   bool isPlaying;
-  PlayerController audioPLayerController;
+  PlayerController audioPlayerController;
 
   AudioModel({
     required this.dateTime,
-    required this.audioPLayerController,
+    required this.audioPlayerController,
     this.isPlaying = false,
   });
 

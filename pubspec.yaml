@@ -15,7 +15,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   get: ^4.6.5
   audio_waveforms: ^0.1.1
-
+  flutter_neumorphic: ^3.2.0
+  intl: ^0.17.0
+  permission_handler: ^9.2.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

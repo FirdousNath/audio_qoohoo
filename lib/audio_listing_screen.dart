@@ -1,5 +1,6 @@
+import 'package:audio_qoohoo/constants/colors.dart';
 import 'package:audio_qoohoo/controllers/audio_controller.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'widgets/record_audio_view.dart';
 import 'widgets/audio_list_view.dart';
@@ -18,16 +19,23 @@ class _AudioListingScreenState extends State<AudioListingScreen> {
     return SafeArea(
       top: false,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Qoohoo Audio Demo"),
+        appBar: NeumorphicAppBar(
+          centerTitle: false,
+          title: const Text("Qoohoo Recording App"),
           actions: [
-            IconButton(
-              //for good UX we can show confirmation dialog
+            NeumorphicButton(
               onPressed: audioController.resetList,
-              icon: const Icon(
-                Icons.cleaning_services_outlined,
+              style: const NeumorphicStyle(
+                depth: 3,
+                shape: NeumorphicShape.flat,
+                boxShape: NeumorphicBoxShape.circle(),
               ),
-            )
+              padding: const EdgeInsets.all(12.0),
+              child: const Icon(
+                Icons.cleaning_services,
+                color: primaryColor,
+              ),
+            ),
           ],
         ),
         body: Column(
