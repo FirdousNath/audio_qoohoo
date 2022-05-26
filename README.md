@@ -14,7 +14,7 @@ Audio recorder app as part of assignment
 - clear functionality do not delete recordings from internal storage
 - on listing waves are not appearing on Android
 
-## Scope of improvemnts
+## Scope of improvements
 
 - Proper permission handling (educating user and showing rationale if denied)
 - Reading already saved recordings
