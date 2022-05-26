@@ -74,4 +74,8 @@ class AudioController extends GetxController {
     temp[index] = audioModel;
     _recordingList.value = List<AudioModel>.from(temp);
   }
+
+  void resetList() {
+    _recordingList.value = List<AudioModel>.empty();
+  }
 }
