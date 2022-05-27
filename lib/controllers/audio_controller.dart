@@ -130,7 +130,7 @@ class AudioController extends GetxController {
     _timerController = Timer.periodic(
       const Duration(seconds: 1),
       ((_timerController) {
-        _timer.value = _timer + 1;
+        _timer.value = _timer.value + 1;
       }),
     );
   }

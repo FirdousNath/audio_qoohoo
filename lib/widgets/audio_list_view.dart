@@ -1,6 +1,7 @@
 import 'package:audio_qoohoo/constants/colors.dart';
 import 'package:audio_qoohoo/controllers/audio_controller.dart';
 import 'package:audio_qoohoo/models/audio_model.dart';
+import 'package:audio_qoohoo/utils/date_utils.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -83,9 +84,7 @@ class AudioList extends StatelessWidget {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          '${(Duration(seconds: timer))}'
-                                              .split('.')[0]
-                                              .padLeft(8, '0'),
+                                          getTime(timer),
                                           style: const TextStyle(
                                             color: accentColor,
                                             fontSize: 18,
@@ -153,9 +152,7 @@ class AudioList extends StatelessWidget {
                           height: 4,
                         ),
                         Text(
-                          '${(Duration(seconds: listOfRecordings[index].time))}'
-                              .split('.')[0]
-                              .padLeft(8, '0'),
+                          getTime(listOfRecordings[index].time),
                           style: const TextStyle(
                             color: accentColor,
                             fontSize: 12,

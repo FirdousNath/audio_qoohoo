@@ -1,5 +1,6 @@
 import 'package:audio_qoohoo/constants/colors.dart';
 import 'package:audio_qoohoo/controllers/audio_controller.dart';
+import 'package:audio_qoohoo/utils/date_utils.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -57,9 +58,7 @@ class RecordAudioView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '${(Duration(seconds: timer))}'
-                        .split('.')[0]
-                        .padLeft(8, '0'),
+                    getTime(timer),
                     style: const TextStyle(
                       color: accentColor,
                       fontSize: 18,
