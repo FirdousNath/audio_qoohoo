@@ -2,6 +2,9 @@
 
 Audio recorder app as part of assignment
 
+<img src="https://user-images.githubusercontent.com/19954996/170642093-70e2b16a-e24a-472d-a94e-5ea13b007d5d.gif">
+
+
 ## External libraries used
 
 - [Getx as architecture](https://pub.dev/packages/get)
